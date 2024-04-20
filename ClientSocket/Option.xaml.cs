@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using XExten.Advance.LinqFramework;
 
 namespace ClientSocket
 {
@@ -13,7 +14,8 @@ namespace ClientSocket
         public Option()
         {
             InitializeComponent();
-
+            Invet.Text = ConfigurationManager.AppSettings["Invet"];
+            Wait.Text = ConfigurationManager.AppSettings["Num"];
         }
 
         private void HandleEvent(object sender, RoutedEventArgs e)
@@ -52,6 +54,11 @@ namespace ClientSocket
         private void Handle(object sender, RoutedEventArgs e)
         {
             this.DialogResult = false;
+        }
+
+        private void DownEvent(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            this.DragMove();
         }
     }
 }
