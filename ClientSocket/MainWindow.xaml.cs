@@ -17,13 +17,16 @@ namespace ClientSocket
     public partial class MainWindow : Window
     {
         private MainViewModel VM;
+        private int Invet;
+        private int Fix;
         private JsonDbHandle<DeviceModelDTO> JsonDbHandle;
         public MainWindow()
         {
             VM = IocDependency.Resolve<MainViewModel>();
             JsonDbHandle = new JsonDbContext(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Device.json")).LoadInMemory<DeviceModelDTO>();
             VM.Device = new(JsonDbHandle.GetAll().ToMapest<List<DeviceModel>>());
-            VM.Fix= ConfigurationManager.AppSettings["Num"];
+            Fix = ConfigurationManager.AppSettings["Num"].AsInt();
+            Invet = ConfigurationManager.AppSettings["Invet"].AsInt();
             InitializeComponent();
             this.DataContext = VM;
         }
@@ -56,7 +59,7 @@ namespace ClientSocket
                         CycleTime = 0d,
                         TotalTime = 0d,
                         IsAuto = false
-                    }) ;
+                    });
             }
             if (target == 3)
             {
@@ -83,10 +86,10 @@ namespace ClientSocket
             }
             if (target == 1)
             {
-                if(!model.IsAuto)
+                if (!model.IsAuto)
                     model.CycleTime = 0;
                 model.IsBegin = true;
-                var len = Math.Ceiling(575d / (15 * VM.Fix.AsInt()));
+                var len = Math.Ceiling(575d / (15 * Fix));
                 for (int i = 1; i <= len; i++)
                 {
                     if (model.IsBegin)
@@ -95,7 +98,7 @@ namespace ClientSocket
                         {
                             model.CycleTime++;
                             model.TotalTime++;
-                            model.Width = i * VM.Fix.AsInt() * 15;
+                            model.Width = i * Fix * 15;
                             await Task.Delay(1000);
                         });
                         if (i == len)
@@ -104,19 +107,29 @@ namespace ClientSocket
                             model.Count++;
                             if (model.IsAuto)
                             {
-                               await  Task.Run(async () =>
-                                {
-                                    await Task.Delay(5000);
-                                    this.Dispatcher.Invoke(() =>
-                                    {
-                                        InEvent(sender, e);
-                                    });
-                                });
-                              
+                                await Task.Run(async () =>
+                                 {
+                                     await Task.Delay(Invet);
+                                     this.Dispatcher.Invoke(() =>
+                                     {
+                                         InEvent(sender, e);
+                                     });
+                                 });
+
                             }
                         }
                     }
                 }
+            }
+        }
+
+        private void SettingEvent(object sender, RoutedEventArgs e)
+        {
+            var win = new Option { Title = "配置编辑" };
+            if (win.ShowDialog().Value)
+            {
+                Invet = win.Invet.Text.AsInt() * 1000;
+                Fix = win.Wait.Text.AsInt();
             }
         }
     }

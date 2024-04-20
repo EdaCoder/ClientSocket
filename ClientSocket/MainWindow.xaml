@@ -127,14 +127,6 @@
             Margin="0,0,20,0"
             HorizontalAlignment="Right"
             Orientation="Horizontal">
-            <TextBox
-                Width="60"
-                Height="40"
-                Margin="10,0"
-                VerticalAlignment="Center"
-                VerticalContentAlignment="Center"
-                FontSize="28"
-                Text="{Binding Fix, Mode=TwoWay}" />
             <Button
                 Margin="0,20"
                 Click="HandleEvent"
@@ -152,6 +144,11 @@
                 Click="HandleEvent"
                 CommandParameter="3"
                 Content="保存数据"
+                Style="{DynamicResource Btn}" />
+            <Button
+                Margin="0,20"
+                Click="SettingEvent"
+                Content="配置"
                 Style="{DynamicResource Btn}" />
         </StackPanel>
     </Grid>

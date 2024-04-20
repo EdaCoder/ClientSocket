@@ -34,11 +34,11 @@ namespace ClientSocket
             this.DialogResult = false;
         }
 
-            private void HandleEvent(object sender, RoutedEventArgs e)
+        private void HandleEvent(object sender, RoutedEventArgs e)
         {
             var target = int.Parse((sender as Button).CommandParameter.ToString());
             if (target == 1) this.DialogResult = true;
-            else  this.DialogResult = false;
+            else this.DialogResult = false;
         }
     }
 }
