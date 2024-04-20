@@ -26,7 +26,7 @@ namespace ClientSocket
             JsonDbHandle = new JsonDbContext(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Device.json")).LoadInMemory<DeviceModelDTO>();
             VM.Device = new(JsonDbHandle.GetAll().ToMapest<List<DeviceModel>>());
             Fix = ConfigurationManager.AppSettings["Num"].AsInt();
-            Invet = ConfigurationManager.AppSettings["Invet"].AsInt();
+            Invet = ConfigurationManager.AppSettings["Invet"].AsInt()*1000;
             InitializeComponent();
             this.DataContext = VM;
         }
