@@ -75,7 +75,18 @@ namespace ClientSocket
             var target = int.Parse(btn.Tag.ToString());
             var model = (DeviceModel)btn.CommandParameter;
             if (target == 4)
-                model.IsAuto = true;
+            {
+                if (model.IsAuto == false)
+                {
+                    model.IsAuto = true;
+                    btn.Content = "取消自动";
+                }
+                else
+                {
+                    model.IsAuto = false;
+                    btn.Content = "自动";
+                }
+            }
             if (target == 3)
                 VM.Device.Remove(model);
             if (target == 2)
