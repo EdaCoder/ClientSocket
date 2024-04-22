@@ -72,5 +72,22 @@ namespace ClientSocket.Controllers
             }
             return MessageModel<RunInfoModel>.Error(data);
         }
+
+        [HttpGet]
+        public MessageModel<HeartInfoModel> GetHeartData(string Ip)
+        {
+            var model = VM.Device.FirstOrDefault(t => t.Ip == Ip);
+            var data = new HeartInfoModel();
+            if (model != null)
+            {
+                Random ran = new Random();
+                data.AllOpenSeconds = ran.Next(10000, 1000000);
+                data.TodayOpenSeconds = ran.Next(1000, 10000);
+                data.AllWorkSeconds = ran.Next(10000, 1000000);
+                data.TodayWorkSeconds = ran.Next(1000, 1000);
+                return MessageModel<HeartInfoModel>.Success(data);
+            }
+            return MessageModel<HeartInfoModel>.Error(data);
+        }
     }
 }
