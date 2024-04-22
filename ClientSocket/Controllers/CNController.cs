@@ -80,11 +80,10 @@ namespace ClientSocket.Controllers
             var data = new HeartInfoModel();
             if (model != null)
             {
-                Random ran = new Random();
-                data.AllOpenSeconds = ran.Next(10000, 1000000);
-                data.TodayOpenSeconds = ran.Next(1000, 10000);
-                data.AllWorkSeconds = ran.Next(10000, 1000000);
-                data.TodayWorkSeconds = ran.Next(1000, 1000);
+                data.AllOpenSeconds = model.TotalTime * 100;
+                data.TodayOpenSeconds = 0;
+                data.AllWorkSeconds = model.TotalTime * 10;
+                data.TodayWorkSeconds = model.TotalTime;
                 return MessageModel<HeartInfoModel>.Success(data);
             }
             return MessageModel<HeartInfoModel>.Error(data);

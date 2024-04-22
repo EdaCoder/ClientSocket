@@ -86,14 +86,14 @@
                 <Button
                     Margin="0,20"
                     Click="HandleEvent"
-                    CommandParameter="1"
-                    Content="确定"
+                    CommandParameter="2"
+                    Content="取消"
                     Style="{DynamicResource Btn}" />
                 <Button
                     Margin="0,20"
                     Click="HandleEvent"
-                    CommandParameter="2"
-                    Content="取消"
+                    CommandParameter="1"
+                    Content="确定"
                     Style="{DynamicResource Btn}" />
             </StackPanel>
         </Grid>
