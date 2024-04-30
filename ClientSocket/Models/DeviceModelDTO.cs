@@ -17,5 +17,8 @@ namespace ClientSocket.Models
         public int Count { get; set; }
         public double CycleTime { get; set; }
         public double TotalTime { get; set; }
+        public int No {  get; set; }
+        public string Colors {  get; set; }
+        public bool IsSame {  get; set; }
     }
 }

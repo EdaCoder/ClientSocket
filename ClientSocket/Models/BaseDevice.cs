@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace ClientSocket.Models
 {
@@ -39,6 +40,18 @@ namespace ClientSocket.Models
         {
             get { return _ip; }
             set { SetAndNotify(ref _ip, value); }
+        }
+        private int _No;
+        public int No
+        {
+            get { return _No; }
+            set { SetAndNotify(ref _No, value); }
+        }
+        private Brush _Color;
+        public Brush Color
+        {
+            get { return _Color; }
+            set { SetAndNotify(ref _Color, value); }
         }
     }
 }

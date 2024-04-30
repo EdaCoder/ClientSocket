@@ -1,11 +1,14 @@
-﻿using ClientSocket.DTO;
-using ClientSocket.Models;
+﻿using ClientSocket.Models;
+using ClientSocket.Tools;
 using ClientSocket.ViewModels;
+using Stylet;
 using System.Configuration;
 using System.IO;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using XExten.Advance.IocFramework;
 using XExten.Advance.JsonDbFramework;
 using XExten.Advance.LinqFramework;
@@ -21,11 +24,18 @@ namespace ClientSocket
         private int Invet;
         private int Fix;
         private JsonDbHandle<DeviceModelDTO> JsonDbHandle;
+        private bool IsStartAuto = false;
         public MainWindow()
         {
             VM = IocDependency.Resolve<MainViewModel>();
+            VM.Device = new();
             JsonDbHandle = new JsonDbContext(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Device.json")).LoadInMemory<DeviceModelDTO>();
-            VM.Device = new(JsonDbHandle.GetAll().ToMapest<List<DeviceModel>>());
+            JsonDbHandle.GetAll().ForEach(item =>
+            {
+                var Model = item.ToMapest<DeviceModel>();
+                Model.Color = new SolidColorBrush((Color)ColorConverter.ConvertFromString(item.Colors));
+                VM.Device.Add(Model);
+            });
             Fix = ConfigurationManager.AppSettings["Num"].AsInt();
             Invet = ConfigurationManager.AppSettings["Invet"].AsInt() * 1000;
             InitializeComponent();
@@ -50,7 +60,10 @@ namespace ClientSocket
                 var win = new Add() { Title = "添加设备" };
                 if (win.ShowDialog().Value)
                     if (target == 1)
-                        VM.Device.Add(new DeviceModel
+                    {
+                        var No = VM.Device.Count == 0 ? 0 : VM.Device.Where(t => t.No != -1).Max(t => t.No);
+                        var Ck = bool.Parse((win.AutoDevice.SelectedItem as ComboBoxItem).Content.ToString());
+                        var Model = new DeviceModel
                         {
                             IsBegin = false,
                             Id = Guid.NewGuid(),
@@ -59,13 +72,22 @@ namespace ClientSocket
                             Width = 0,
                             CycleTime = 0d,
                             TotalTime = 0d,
-                            IsAuto = false
-                        });
+                            IsAuto = false,
+                            No = Ck ? No + 1 : -1,
+                            IsSame = false,
+                        };
+                        Model.Color = Model.No <= 0 ? Brushes.White : (Model.No % 2 == 0 ? Brushes.LightBlue : Brushes.OrangeRed);
+                        VM.Device.Add(Model);
+                    }
             }
             else
             {
                 JsonDbHandle.Delete(t => t.Id != Guid.Empty).ExcuteDelete().SaveChange();
                 var param = VM.Device.ToList().ToMapest<List<DeviceModelDTO>>();
+                param.ForEach(item =>
+                {
+                    item.Colors = VM.Device.First(t => t.Id == item.Id).Color.ToString();
+                });
                 JsonDbHandle.Insert(param).ExuteInsert().SaveChange();
             }
         }
@@ -134,14 +156,72 @@ namespace ClientSocket
             }
         }
 
-        private void SettingEvent(object sender, RoutedEventArgs e)
+        private void AutoEvent(object sender, RoutedEventArgs e)
         {
-            var win = new Option { Title = "配置编辑" };
-            if (win.ShowDialog().Value)
+            if (!IsStartAuto)
             {
-                Invet = win.Invet.Text.AsInt() * 1000;
-                Fix = win.Wait.Text.AsInt();
+                var Len = Math.Ceiling(575d / (15 * Fix));
+                var NoSameDevice = VM.Device.Where(t => t.No != -1).Where(t => t.IsSame == false).ToList();
+                foreach (var device in NoSameDevice)
+                {
+                    ThreadFactory.Instance.StartWithRestart(() =>
+                    {
+                        device.IsBegin = true;
+                        for (int no = 1; no <= Len; no++)
+                        {
+                            if (device.IsBegin)
+                            {
+                                device.CycleTime++;
+                                device.TotalTime++;
+                                device.Width = no * Fix * 15;
+                                Thread.Sleep(device.No * 100);
+                            }
+                            if (no == Len)
+                            {
+                                device.IsBegin = false;
+                                device.Count++;
+                                Thread.Sleep(Invet);
+                            }
+                        }
+                    }, device.Id.ToString());
+                }
+
+                var SameDevice = VM.Device.Where(t => t.No != -1).Where(t => t.IsSame == true).ToList();
+                int Seed = GetSeed(SameDevice.Count);
+                ThreadFactory.Instance.StartWithRestart(() =>
+                {
+                    var device = SameDevice[Seed];
+                    device.IsBegin = true;
+                    for (int no = 1; no <= Len; no++)
+                    {
+                        if (device.IsBegin)
+                        {
+                            device.CycleTime++;
+                            device.TotalTime++;
+                            device.Width = no * Fix * 15;
+                            Thread.Sleep(device.No * 100);
+                        }
+                        if (no == Len)
+                        {
+                            device.IsBegin = false;
+                            device.Count++;
+                            Seed= GetSeed(SameDevice.Count);
+                            Thread.Sleep(Invet);
+                        }
+                    }
+                }, "Same");
+
+                AutoBtn.Content = "自动化停止";
+                IsStartAuto = true;
+            }
+            else
+            {
+                IsStartAuto = false;
+                AutoBtn.Content = "自动化启动";
+                ThreadFactory.Instance.Dispose();
             }
         }
+
+        private int GetSeed(int len) =>  new Random(Guid.NewGuid().GetHashCode()).Next(0, len);
     }
 }

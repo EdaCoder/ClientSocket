@@ -33,5 +33,11 @@ namespace ClientSocket.Models
             get { return _TotalTime; }
             set { SetAndNotify(ref _TotalTime, value); }
         }
+        private bool _IsSame;
+        public bool IsSame
+        {
+            get { return _IsSame; }
+            set { SetAndNotify(ref _IsSame, value); }
+        }
     }
 }

@@ -61,23 +61,39 @@
                                         <GradientStop Offset="1" Color="LightBlue" />
                                     </LinearGradientBrush>
                                 </uc:BeveledBorder.BorderBrush>
-                                <StackPanel
-                                    Margin="10,0"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Center">
-                                    <TextBlock FontSize="30">
-                                        <Run Text="IP：" />
-                                        <Run Text="{Binding Ip}" />
-                                    </TextBlock>
-                                    <TextBlock FontSize="30">
-                                        <Run Text="设备：" />
-                                        <Run Text="{Binding Name}" />
-                                    </TextBlock>
-                                    <TextBlock FontSize="30">
-                                        <Run Text="产量：" />
-                                        <Run Text="{Binding Count}" />
-                                    </TextBlock>
-                                </StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width=".7*" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel
+                                        Margin="10,0"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center">
+                                        <TextBlock FontSize="30">
+                                            <Run Text="IP:" />
+                                            <Run Text="{Binding Ip}" />
+                                        </TextBlock>
+                                        <TextBlock FontSize="30">
+                                            <Run Text="设备:" />
+                                            <Run Text="{Binding Name}" />
+                                        </TextBlock>
+                                        <TextBlock FontSize="30">
+                                            <Run Text="产量:" />
+                                            <Run Text="{Binding Count}" />
+                                        </TextBlock>
+                                    </StackPanel>
+                                    <StackPanel
+                                        Grid.Column="1"
+                                        VerticalAlignment="Bottom"
+                                        Orientation="Horizontal">
+                                        <CheckBox Content="相同工序" IsChecked="{Binding IsSame}">
+                                            <CheckBox.LayoutTransform>
+                                                <ScaleTransform ScaleX="2" ScaleY="2" />
+                                            </CheckBox.LayoutTransform>
+                                        </CheckBox>
+                                    </StackPanel>
+                                </Grid>
                             </uc:BeveledBorder>
                             <StackPanel
                                 Grid.Column="1"
@@ -117,7 +133,7 @@
                             Width="{Binding Width}"
                             Height="30"
                             HorizontalAlignment="Left"
-                            Background="#FF44A974" />
+                            Background="{Binding Color}" />
                     </StackPanel>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
@@ -127,6 +143,12 @@
             Margin="0,0,20,0"
             HorizontalAlignment="Right"
             Orientation="Horizontal">
+            <Button
+                x:Name="AutoBtn"
+                Margin="0,20"
+                Click="AutoEvent"
+                Content="自动化启动"
+                Style="{DynamicResource Btn}" />
             <Button
                 Margin="0,20"
                 Click="HandleEvent"
@@ -138,11 +160,6 @@
                 Click="HandleEvent"
                 CommandParameter="2"
                 Content="保存数据"
-                Style="{DynamicResource Btn}" />
-            <Button
-                Margin="0,20"
-                Click="SettingEvent"
-                Content="配置"
                 Style="{DynamicResource Btn}" />
         </StackPanel>
     </Grid>
