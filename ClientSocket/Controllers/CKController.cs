@@ -31,6 +31,7 @@ namespace ClientSocket.Controllers
             data.ApertureStandard = ran.Next(1, 10);
             data.RealityAperture = ran.Next(1, 10);
             data.CheckRes = salt[ran.Next(0, salt.Length)] >= 7 ? 2 : 1;
+            data.Count = model.Count;
             return MessageModel<CheckInfoModel>.Success(data);
         }
     }

@@ -28,5 +28,9 @@ namespace ClientSocket.DTO
         /// 检测结果 1-合格，2-不良
         /// </summary>
         public int CheckRes { get; set; }
+        /// <summary>
+        /// 数量
+        /// </summary>
+        public int Count {  get; set; }
     }
 }
