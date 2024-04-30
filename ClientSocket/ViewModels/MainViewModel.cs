@@ -19,5 +19,12 @@ namespace ClientSocket.ViewModels
             get { return _Devcie; }
             set { SetAndNotify(ref _Devcie, value); }
         }
+
+        private ObservableCollection<CheckModel> _Check;
+        public ObservableCollection<CheckModel> Check
+        {
+            get { return _Check; }
+            set { SetAndNotify(ref _Check, value); }
+        }
     }
 }

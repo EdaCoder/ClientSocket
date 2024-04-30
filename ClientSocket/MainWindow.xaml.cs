@@ -20,13 +20,16 @@ namespace ClientSocket
         private int Invet;
         private int Fix;
         private JsonDbHandle<DeviceModelDTO> JsonDbHandle;
+        private JsonDbHandle<CheckModelDTO> CJsonDbHandle;
         public MainWindow()
         {
             VM = IocDependency.Resolve<MainViewModel>();
             JsonDbHandle = new JsonDbContext(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Device.json")).LoadInMemory<DeviceModelDTO>();
+            CJsonDbHandle = new JsonDbContext(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Check.json")).LoadInMemory<CheckModelDTO>();
             VM.Device = new(JsonDbHandle.GetAll().ToMapest<List<DeviceModel>>());
+            VM.Check = new(CJsonDbHandle.GetAll().ToMapest<List<CheckModel>>());
             Fix = ConfigurationManager.AppSettings["Num"].AsInt();
-            Invet = ConfigurationManager.AppSettings["Invet"].AsInt()*1000;
+            Invet = ConfigurationManager.AppSettings["Invet"].AsInt() * 1000;
             InitializeComponent();
             this.DataContext = VM;
         }
@@ -49,23 +52,36 @@ namespace ClientSocket
                 var Title = target == 1 ? "添加机床" : "添加检具";
                 var win = new Add() { Title = Title };
                 if (win.ShowDialog().Value)
-                    VM.Device.Add(new DeviceModel
-                    {
-                        IsBegin = false,
-                        Id = Guid.NewGuid(),
-                        Ip = win.IP.Text,
-                        Name = win.Device.Text,
-                        Width = 0,
-                        CycleTime = 0d,
-                        TotalTime = 0d,
-                        IsAuto = false
-                    });
+                    if (target == 1)
+                        VM.Device.Add(new DeviceModel
+                        {
+                            IsBegin = false,
+                            Id = Guid.NewGuid(),
+                            Ip = win.IP.Text,
+                            Name = win.Device.Text,
+                            Width = 0,
+                            CycleTime = 0d,
+                            TotalTime = 0d,
+                            IsAuto = false
+                        });
+                    else
+                        VM.Check.Add(new CheckModel {
+                            IsBegin = false,
+                            Id = Guid.NewGuid(),
+                            Ip = win.IP.Text,
+                            Name = win.Device.Text,
+                            IsAuto = false
+                        });
             }
             if (target == 3)
             {
                 JsonDbHandle.Delete(t => t.Id != Guid.Empty).ExcuteDelete().SaveChange();
                 var param = VM.Device.ToList().ToMapest<List<DeviceModelDTO>>();
                 JsonDbHandle.Insert(param).ExuteInsert().SaveChange();
+
+                CJsonDbHandle.Delete(t => t.Id != Guid.Empty).ExcuteDelete().SaveChange();
+                var param2 = VM.Check.ToList().ToMapest<List<CheckModelDTO>>();
+                CJsonDbHandle.Insert(param2).ExuteInsert().SaveChange();
             }
         }
 
