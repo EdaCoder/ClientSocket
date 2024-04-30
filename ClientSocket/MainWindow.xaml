@@ -131,18 +131,12 @@
                 Margin="0,20"
                 Click="HandleEvent"
                 CommandParameter="1"
-                Content="添加机床"
+                Content="添加设备"
                 Style="{DynamicResource Btn}" />
             <Button
                 Margin="0,20"
                 Click="HandleEvent"
                 CommandParameter="2"
-                Content="添加检具"
-                Style="{DynamicResource Btn}" />
-            <Button
-                Margin="0,20"
-                Click="HandleEvent"
-                CommandParameter="3"
                 Content="保存数据"
                 Style="{DynamicResource Btn}" />
             <Button

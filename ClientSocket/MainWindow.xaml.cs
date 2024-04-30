@@ -45,10 +45,9 @@ namespace ClientSocket
         private void HandleEvent(object sender, RoutedEventArgs e)
         {
             var target = int.Parse((sender as Button).CommandParameter.ToString());
-            if (target != 3)
+            if (target == 1)
             {
-                var Title = target == 1 ? "添加机床" : "添加检具";
-                var win = new Add() { Title = Title };
+                var win = new Add() { Title = "添加设备" };
                 if (win.ShowDialog().Value)
                     if (target == 1)
                         VM.Device.Add(new DeviceModel
@@ -63,7 +62,7 @@ namespace ClientSocket
                             IsAuto = false
                         });
             }
-            if (target == 3)
+            else
             {
                 JsonDbHandle.Delete(t => t.Id != Guid.Empty).ExcuteDelete().SaveChange();
                 var param = VM.Device.ToList().ToMapest<List<DeviceModelDTO>>();
@@ -128,7 +127,6 @@ namespace ClientSocket
                                          InEvent(sender, e);
                                      });
                                  });
-
                             }
                         }
                     }
