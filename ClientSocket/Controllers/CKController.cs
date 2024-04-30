@@ -14,7 +14,7 @@ namespace ClientSocket.Controllers
         [HttpGet]
         public MessageModel<bool> GetStatus(string Ip)
         {
-            var model = VM.Check.FirstOrDefault(t => t.Ip == Ip);
+            var model = VM.Device.FirstOrDefault(t => t.Ip == Ip);
             var res = model != null && model.IsBegin;
             return MessageModel<bool>.Success(res);
         }
@@ -23,7 +23,7 @@ namespace ClientSocket.Controllers
         public MessageModel<CheckInfoModel> GetBasicData(string Ip)
         {
             int[] salt = {1,2,3,4,5,6,7,8,9,10 };
-            var model = VM.Check.FirstOrDefault(t => t.Ip == Ip);
+            var model = VM.Device.FirstOrDefault(t => t.Ip == Ip);
             Random ran = new Random();
             var data = new CheckInfoModel();
             data.HeightStandard = ran.Next(1, 10);
