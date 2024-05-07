@@ -16,10 +16,29 @@ namespace DataOffsets
         private async void b1_Click(object sender, EventArgs e)
         {
             await Request.Login(t1.Text, t2.Text);
-            var data = await Request.BasicInfo();
-            c1.DataSource = new List<Temp> { new Temp { Key = data.ProLineName, Value = data.ProLineId } };
-            c2.DataSource = new List<Temp> { new Temp { Key = data.ProductList[0].ProductName, Value = data.ProductList[0].ProductId } };
-            c3.DataSource = new List<Temp> { new Temp { Key = data.ProcessList[0].ProcessName, Value = data.ProcessList[0].ProcessId } };
+            var datas = await Request.BasicInfo();
+
+            var c1data = new List<Temp>();
+            var c2data = new List<Temp>();
+            var c3data = new List<Temp>();
+
+
+            datas.ForEach(data =>
+            {
+                if (c1data.FirstOrDefault(t => t.Value == data.ProLineId) == null)
+                    c1data.Add(new Temp { Key = data.ProLineName, Value = data.ProLineId });
+
+                if (c2data.FirstOrDefault(t => t.Value == data.ProductList[0].ProductId) == null)
+                    c2data.Add(new Temp { Key = data.ProductList[0].ProductName, Value = data.ProductList[0].ProductId });
+
+                if (c3data.FirstOrDefault(t => t.Value == data.ProcessList[0].ProcessId) == null)
+                    c3data.Add(new Temp { Key = data.ProcessList[0].ProcessName, Value = data.ProcessList[0].ProcessId });
+            });
+
+            c1.DataSource = c1data;
+            c2.DataSource = c2data;
+            c3.DataSource = c3data;
+
             c1.DisplayMember = c2.DisplayMember = c3.DisplayMember = "Key";
             c1.ValueMember = c2.ValueMember = c3.ValueMember = "Value";
         }

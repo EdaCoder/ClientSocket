@@ -53,10 +53,10 @@ namespace DataOffsets
         }
 
 
-        public static async Task<AutoDto> BasicInfo()
+        public static async Task<List<AutoDto>> BasicInfo()
         {
             var json = await Get("Sys/GetAllClientAuth");
-            return JsonSerializer.Deserialize<Result<List<AutoDto>>>(json).Data[0];
+            return JsonSerializer.Deserialize<Result<List<AutoDto>>>(json).Data;
         }
 
         public static async Task<string> GetDeviceId(string ProcessId, string Ip)
