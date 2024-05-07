@@ -33,8 +33,10 @@ namespace DataOffsets
             for (int index = 0; index < int.Parse(t5.Text); index++)
             {
                 var res = await Request.Submit(deviceId, c3.SelectedValue.ToString(), FlowId, c1.SelectedValue.ToString());
-                lb.Items.Add(res);
+                lb.Items.Add($"是否完成：{(res ? "是" : "否")}");
                 lb.Items.Add(" ");
+                if (res)
+                    break;
             }
         }
     }

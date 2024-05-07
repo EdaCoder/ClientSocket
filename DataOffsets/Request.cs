@@ -109,7 +109,7 @@ namespace DataOffsets
                 StartUpMode = 1,
                 CollectData = BASE64Data
             });
-            return JsonSerializer.Deserialize<Result<JsonObject>>(json).Success;
+           return bool.Parse(JsonSerializer.Deserialize<Result<JsonObject>>(json).Data["IsAllComplete"].ToString());
         }
     }
 }
