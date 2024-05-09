@@ -84,6 +84,7 @@ namespace ClientSocket.Controllers
                 data.TodayOpenSeconds = 0;
                 data.AllWorkSeconds = model.TotalTime * 10;
                 data.TodayWorkSeconds = model.TotalTime;
+                data.CycleCount = model.Count;
                 return MessageModel<HeartInfoModel>.Success(data);
             }
             return MessageModel<HeartInfoModel>.Error(data);

@@ -24,5 +24,9 @@ namespace ClientSocket.DTO
         /// 今日加工总时间
         /// </summary>
         public double TodayWorkSeconds { get; set; }
+        /// <summary>
+        /// 加工工件数
+        /// </summary>
+        public int CycleCount {  get; set; }
     }
 }
