@@ -1,24 +1,27 @@
 ﻿using ClientSocket.Models;
-using ClientSocket.Tools;
 using ClientSocket.ViewModels;
-using Stylet;
 using System.Configuration;
 using System.IO;
-using System.Threading;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using XExten.Advance.EventFramework;
+using XExten.Advance.EventFramework.EventSources;
+using XExten.Advance.EventFramework.PublishEvent;
+using XExten.Advance.EventFramework.SubscriptEvent;
 using XExten.Advance.IocFramework;
 using XExten.Advance.JsonDbFramework;
 using XExten.Advance.LinqFramework;
+using XExten.Advance.ThreadFramework;
 
 namespace ClientSocket
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IEventSubscriber
     {
         private MainViewModel VM;
         private int Invet;
