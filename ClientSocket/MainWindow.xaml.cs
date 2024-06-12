@@ -64,8 +64,8 @@ namespace ClientSocket
                 if (win.ShowDialog().Value)
                     if (target == 1)
                     {
-                        var No = VM.Device.Count == 0 ? 0 : VM.Device.Where(t => t.No != -1).Max(t => t.No);
                         var Ck = bool.Parse((win.AutoDevice.SelectedItem as ComboBoxItem).Content.ToString());
+                        var No = VM.Device.Count == 0 ? 0 : (VM.Device.FirstOrDefault(t => t.No != -1)==null?0: VM.Device.Where(t => t.No != -1).Max(t => t.No));
                         var Model = new DeviceModel
                         {
                             IsBegin = false,
