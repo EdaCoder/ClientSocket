@@ -11,6 +11,13 @@ namespace ClientSocket.Models
     public class BaseDevice: PropertyChangedBase
     {
 
+        private int _Invet;
+        public int Invet
+        {
+            get { return _Invet; }
+            set { SetAndNotify(ref _Invet, value); }
+        }
+
         private bool _IsAuto;
         public bool IsAuto
         {

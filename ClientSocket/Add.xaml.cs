@@ -30,5 +30,16 @@ namespace ClientSocket
             if (target == 1) this.DialogResult = true;
             else this.DialogResult = false;
         }
+
+        private void AutoChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (InvetCtrl != null)
+            {
+                if (bool.Parse(((ComboBoxItem)AutoDevice.SelectedValue).Content.ToString()))
+                    InvetCtrl.Visibility = Visibility.Visible;
+                else
+                    InvetCtrl.Visibility = Visibility.Collapsed;
+            }
+        }
     }
 }

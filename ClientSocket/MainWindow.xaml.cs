@@ -142,6 +142,9 @@ namespace ClientSocket
                         {
                             model.IsBegin = false;
                             model.Count++;
+                            model.TodayCountLimit++;
+                            if (model.TodayCountLimit >= model.TodayCountLimit && model.TodayCountLimit > 0)
+                                model.IsAuto = false;
                             if (model.IsAuto)
                             {
                                 await Task.Run(async () =>
@@ -164,7 +167,8 @@ namespace ClientSocket
             if (!IsStartAuto)
             {
                 var Len = Math.Ceiling(575d / (15 * Fix));
-                var NoSameDevice = VM.Device.Where(t => t.No != -1).Where(t => t.IsSame == false).ToList();
+                List<DeviceModel> NoSameDevice = VM.Device.Where(t => t.No != -1).Where(t => t.IsSame == false).ToList();
+
                 foreach (var device in NoSameDevice)
                 {
                     ThreadFactory.Instance.StartWithRestart(() =>
@@ -177,18 +181,25 @@ namespace ClientSocket
                                 device.CycleTime++;
                                 device.TotalTime++;
                                 device.Width = no * Fix * 15;
-                                Thread.Sleep(device.No * 100);
+                                if(device.Invet<2)
+                                  Thread.Sleep(device.No * 200);
+                                else
+                                    Thread.Sleep(device.Invet * 200);
                             }
                             if (no == Len)
                             {
                                 device.IsBegin = false;
                                 device.Count++;
-                                Thread.Sleep(Invet);
+                                device.TodayCount++;
+                                if(device.TodayCount>= device.TodayCountLimit&& device.TodayCountLimit>0)
+                                    ThreadFactory.Instance.StopTask(device.Id.ToString());
+                                Thread.Sleep((device.Invet<3? Invet: device.Invet )* (device.No/10+device.No));
                             }
                         }
-                    }, device.Id.ToString());
+                    }, device.Id.ToString(),null,false);
                 }
 
+                //相同工序
                 var SameDevice = VM.Device.Where(t => t.No != -1).Where(t => t.IsSame == true).ToList();
                 int Seed = GetSeed(SameDevice.Count);
                 ThreadFactory.Instance.StartWithRestart(() =>
@@ -202,17 +213,23 @@ namespace ClientSocket
                             device.CycleTime++;
                             device.TotalTime++;
                             device.Width = no * Fix * 15;
-                            Thread.Sleep(device.No * 100);
+                            if (device.Invet < 2)
+                                Thread.Sleep(device.No * 200);
+                            else
+                                Thread.Sleep(device.Invet * 200);
                         }
                         if (no == Len)
                         {
                             device.IsBegin = false;
                             device.Count++;
-                            Seed= GetSeed(SameDevice.Count);
-                            Thread.Sleep(Invet);
+                            device.TodayCount++;
+                            Seed = GetSeed(SameDevice.Count);
+                            if (SameDevice.Sum(t => t.TodayCount) >= device.TodayCountLimit && device.TodayCountLimit > 0) 
+                                ThreadFactory.Instance.StopTask("Same");
+                            Thread.Sleep((device.Invet < 3 ? Invet : device.Invet) * (device.No / 10 + device.No));
                         }
                     }
-                }, "Same");
+                }, "Same", null, false);
 
                 AutoBtn.Content = "自动化停止";
                 IsStartAuto = true;
@@ -226,5 +243,10 @@ namespace ClientSocket
         }
 
         private int GetSeed(int len) =>  new Random(Guid.NewGuid().GetHashCode()).Next(0, len);
+
+        private void ClearEvent(object sender, RoutedEventArgs e)
+        {
+            ((sender as Button).CommandParameter as DeviceModel).TodayCount = 0;
+        }
     }
 }

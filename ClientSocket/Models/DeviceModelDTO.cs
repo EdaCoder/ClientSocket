@@ -20,5 +20,6 @@ namespace ClientSocket.Models
         public int No {  get; set; }
         public string Colors {  get; set; }
         public bool IsSame {  get; set; }
+        public int Invet {  get; set; }
     }
 }

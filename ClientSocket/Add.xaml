@@ -96,10 +96,34 @@
                         VerticalAlignment="Center"
                         VerticalContentAlignment="Center"
                         FontSize="26"
-                        SelectedIndex="0">
+                        SelectedIndex="0"
+                        SelectionChanged="AutoChanged">
                         <ComboBoxItem Content="False" />
                         <ComboBoxItem Content="True" />
                     </ComboBox>
+                </Grid>
+                <Grid
+                    x:Name="InvetCtrl"
+                    Width="350"
+                    Margin="0,0,0,20"
+                    Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        FontSize="20"
+                        Foreground="White"
+                        Text="间隔：" />
+                    <TextBox
+                        x:Name="Invet"
+                        Grid.Column="1"
+                        Height="40"
+                        VerticalAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        FontSize="26" />
                 </Grid>
             </StackPanel>
             <StackPanel

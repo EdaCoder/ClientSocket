@@ -39,5 +39,17 @@ namespace ClientSocket.Models
             get { return _IsSame; }
             set { SetAndNotify(ref _IsSame, value); }
         }
+        private int _TodayCount;
+        public int TodayCount
+        {
+            get { return _TodayCount; }
+            set { SetAndNotify(ref _TodayCount, value); }
+        } 
+        private int _TodayCountLimit;
+        public int TodayCountLimit
+        {
+            get { return _TodayCountLimit; }
+            set { SetAndNotify(ref _TodayCountLimit, value); }
+        }
     }
 }

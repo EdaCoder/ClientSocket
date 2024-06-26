@@ -69,24 +69,47 @@
                                     <StackPanel
                                         Margin="10,0"
                                         HorizontalAlignment="Left"
-                                        VerticalAlignment="Center">
-                                        <TextBlock FontSize="30">
+                                        VerticalAlignment="Top">
+                                        <TextBlock FontSize="24">
                                             <Run Text="IP:" />
                                             <Run Text="{Binding Ip}" />
                                         </TextBlock>
-                                        <TextBlock FontSize="30">
+                                        <TextBlock FontSize="24">
                                             <Run Text="设备:" />
                                             <Run Text="{Binding Name}" />
                                         </TextBlock>
-                                        <TextBlock FontSize="30">
-                                            <Run Text="产量:" />
+                                        <TextBlock FontSize="24">
+                                            <Run Text="累产:" />
                                             <Run Text="{Binding Count}" />
                                         </TextBlock>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock FontSize="24" Text="产量：" />
+                                            <TextBox
+                                                Width="50"
+                                                Height="22"
+                                                VerticalContentAlignment="Center"
+                                                FontSize="16"
+                                                Text="{Binding TodayCountLimit, Mode=TwoWay}" />
+                                        </StackPanel>
                                     </StackPanel>
                                     <StackPanel
                                         Grid.Column="1"
                                         VerticalAlignment="Bottom"
-                                        Orientation="Horizontal">
+                                        Orientation="Vertical">
+                                        <Button
+                                            Click="ClearEvent"
+                                            CommandParameter="{Binding .}"
+                                            Content="{Binding TodayCount, Converter={StaticResource lc}, Mode=TwoWay}"
+                                            Style="{DynamicResource Btn}" />
+                                        <StackPanel Orientation="Horizontal" Visibility="{Binding No, Converter={StaticResource vc2}}">
+                                            <TextBlock FontSize="24" Text="间隔：" />
+                                            <TextBox
+                                                Width="50"
+                                                Height="22"
+                                                VerticalContentAlignment="Center"
+                                                FontSize="16"
+                                                Text="{Binding Invet}" />
+                                        </StackPanel>
                                         <CheckBox Content="相同工序" IsChecked="{Binding IsSame}">
                                             <CheckBox.LayoutTransform>
                                                 <ScaleTransform ScaleX="2" ScaleY="2" />
@@ -125,7 +148,8 @@
                                         CommandParameter="{Binding .}"
                                         Content="自动"
                                         Style="{DynamicResource Btn}"
-                                        Tag="4" />
+                                        Tag="4"
+                                        Visibility="{Binding No, Converter={StaticResource vc}}" />
                                 </StackPanel>
                             </StackPanel>
                         </Grid>

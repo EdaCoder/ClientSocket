@@ -346,6 +346,10 @@
 
             <!--  默认ScrollView  -->
             <Style BasedOn="{StaticResource for_scrollviewer}" TargetType="ScrollViewer" />
+
+            <local:VisibleConvert2 x:Key="vc2" />
+            <local:VisibleConvert x:Key="vc" />
+            <local:LimitConvert x:Key="lc" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
