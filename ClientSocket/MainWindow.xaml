@@ -146,7 +146,7 @@
                                     <Button
                                         Click="InEvent"
                                         CommandParameter="{Binding .}"
-                                        Content="自动"
+                                        Content="{Binding IsAuto, Converter={StaticResource lsc}}"
                                         Style="{DynamicResource Btn}"
                                         Tag="4"
                                         Visibility="{Binding No, Converter={StaticResource vc}}" />

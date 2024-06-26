@@ -2,14 +2,10 @@
 using ClientSocket.ViewModels;
 using System.Configuration;
 using System.IO;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using XExten.Advance.EventFramework;
-using XExten.Advance.EventFramework.EventSources;
-using XExten.Advance.EventFramework.PublishEvent;
 using XExten.Advance.EventFramework.SubscriptEvent;
 using XExten.Advance.IocFramework;
 using XExten.Advance.JsonDbFramework;
@@ -78,6 +74,7 @@ namespace ClientSocket
                             IsAuto = false,
                             No = Ck ? No + 1 : -1,
                             IsSame = false,
+                            Invet= int.Parse(win.Invet.Text)
                         };
                         Model.Color = Model.No <= 0 ? Brushes.White : (Model.No % 2 == 0 ? Brushes.LightBlue : Brushes.OrangeRed);
                         VM.Device.Add(Model);
@@ -103,15 +100,9 @@ namespace ClientSocket
             if (target == 4)
             {
                 if (model.IsAuto == false)
-                {
                     model.IsAuto = true;
-                    btn.Content = "取消自动";
-                }
                 else
-                {
                     model.IsAuto = false;
-                    btn.Content = "自动";
-                }
             }
             if (target == 3)
                 VM.Device.Remove(model);
@@ -142,8 +133,8 @@ namespace ClientSocket
                         {
                             model.IsBegin = false;
                             model.Count++;
-                            model.TodayCountLimit++;
-                            if (model.TodayCountLimit >= model.TodayCountLimit && model.TodayCountLimit > 0)
+                            model.TodayCount++;
+                            if (model.TodayCount >= model.TodayCountLimit && model.TodayCountLimit > 0)
                                 model.IsAuto = false;
                             if (model.IsAuto)
                             {
