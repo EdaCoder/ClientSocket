@@ -30,138 +30,143 @@
                 Click="Handle"
                 Style="{DynamicResource ClosBtn}" />
         </StackPanel>
-        <ItemsControl
+        <ScrollViewer
             Grid.Row="1"
-            Width="1160"
-            VerticalAlignment="Top"
-            Background="Transparent"
-            BorderThickness="0"
-            ItemsSource="{Binding Device}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Columns="2" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <uc:BeveledBorder
-                                Height="120"
-                                Margin="5"
-                                Background="#7FF9F9F9"
-                                CornerRadius="10">
-                                <uc:BeveledBorder.BorderBrush>
-                                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                                        <GradientStop Color="SkyBlue" />
-                                        <GradientStop Offset="1" Color="LightBlue" />
-                                    </LinearGradientBrush>
-                                </uc:BeveledBorder.BorderBrush>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition />
-                                        <ColumnDefinition Width=".7*" />
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel
-                                        Margin="10,0"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Top">
-                                        <TextBlock FontSize="24">
-                                            <Run Text="IP:" />
-                                            <Run Text="{Binding Ip}" />
-                                        </TextBlock>
-                                        <TextBlock FontSize="24">
-                                            <Run Text="设备:" />
-                                            <Run Text="{Binding Name}" />
-                                        </TextBlock>
-                                        <TextBlock FontSize="24">
-                                            <Run Text="累产:" />
-                                            <Run Text="{Binding Count}" />
-                                        </TextBlock>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock FontSize="24" Text="产量：" />
-                                            <TextBox
-                                                Width="50"
-                                                Height="22"
-                                                VerticalContentAlignment="Center"
-                                                FontSize="16"
-                                                Text="{Binding TodayCountLimit, Mode=TwoWay}" />
+            Height="550"
+            VerticalScrollBarVisibility="Hidden">
+            <ItemsControl
+                Width="1160"
+                VerticalAlignment="Top"
+                Background="Transparent"
+                BorderThickness="0"
+                ItemsSource="{Binding Device}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="2" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <uc:BeveledBorder
+                                    Height="120"
+                                    Margin="5"
+                                    Background="#7FF9F9F9"
+                                    CornerRadius="10">
+                                    <uc:BeveledBorder.BorderBrush>
+                                        <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                            <GradientStop Color="SkyBlue" />
+                                            <GradientStop Offset="1" Color="LightBlue" />
+                                        </LinearGradientBrush>
+                                    </uc:BeveledBorder.BorderBrush>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width=".7*" />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel
+                                            Margin="10,0"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Top">
+                                            <TextBlock FontSize="24">
+                                                <Run Text="IP:" />
+                                                <Run Text="{Binding Ip}" />
+                                            </TextBlock>
+                                            <TextBlock FontSize="24">
+                                                <Run Text="设备:" />
+                                                <Run Text="{Binding Name}" />
+                                            </TextBlock>
+                                            <TextBlock FontSize="24">
+                                                <Run Text="累产:" />
+                                                <Run Text="{Binding Count}" />
+                                            </TextBlock>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock FontSize="24" Text="产量：" />
+                                                <TextBox
+                                                    Width="50"
+                                                    Height="22"
+                                                    VerticalContentAlignment="Center"
+                                                    FontSize="16"
+                                                    Text="{Binding TodayCountLimit, Mode=TwoWay}" />
+                                            </StackPanel>
                                         </StackPanel>
-                                    </StackPanel>
-                                    <StackPanel
-                                        Grid.Column="1"
-                                        VerticalAlignment="Bottom"
-                                        Orientation="Vertical">
+                                        <StackPanel
+                                            Grid.Column="1"
+                                            VerticalAlignment="Bottom"
+                                            Orientation="Vertical">
+                                            <Button
+                                                Click="ClearEvent"
+                                                CommandParameter="{Binding .}"
+                                                Content="{Binding TodayCount, Converter={StaticResource lc}, Mode=TwoWay}"
+                                                Style="{DynamicResource Btn}" />
+                                            <StackPanel Orientation="Horizontal" Visibility="{Binding No, Converter={StaticResource vc2}}">
+                                                <TextBlock FontSize="24" Text="间隔：" />
+                                                <TextBox
+                                                    Width="50"
+                                                    Height="22"
+                                                    VerticalContentAlignment="Center"
+                                                    FontSize="16"
+                                                    Text="{Binding Invet}" />
+                                            </StackPanel>
+                                            <CheckBox Content="相同工序" IsChecked="{Binding IsSame}">
+                                                <CheckBox.LayoutTransform>
+                                                    <ScaleTransform ScaleX="2" ScaleY="2" />
+                                                </CheckBox.LayoutTransform>
+                                            </CheckBox>
+                                        </StackPanel>
+                                    </Grid>
+                                </uc:BeveledBorder>
+                                <StackPanel
+                                    Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    Orientation="Horizontal">
+                                    <StackPanel>
                                         <Button
-                                            Click="ClearEvent"
+                                            Click="InEvent"
                                             CommandParameter="{Binding .}"
-                                            Content="{Binding TodayCount, Converter={StaticResource lc}, Mode=TwoWay}"
-                                            Style="{DynamicResource Btn}" />
-                                        <StackPanel Orientation="Horizontal" Visibility="{Binding No, Converter={StaticResource vc2}}">
-                                            <TextBlock FontSize="24" Text="间隔：" />
-                                            <TextBox
-                                                Width="50"
-                                                Height="22"
-                                                VerticalContentAlignment="Center"
-                                                FontSize="16"
-                                                Text="{Binding Invet}" />
-                                        </StackPanel>
-                                        <CheckBox Content="相同工序" IsChecked="{Binding IsSame}">
-                                            <CheckBox.LayoutTransform>
-                                                <ScaleTransform ScaleX="2" ScaleY="2" />
-                                            </CheckBox.LayoutTransform>
-                                        </CheckBox>
+                                            Content="开始"
+                                            Style="{DynamicResource Btn}"
+                                            Tag="1" />
+                                        <Button
+                                            Click="InEvent"
+                                            CommandParameter="{Binding .}"
+                                            Content="结束"
+                                            Style="{DynamicResource Btn}"
+                                            Tag="2" />
                                     </StackPanel>
-                                </Grid>
-                            </uc:BeveledBorder>
-                            <StackPanel
-                                Grid.Column="1"
-                                VerticalAlignment="Center"
-                                Orientation="Horizontal">
-                                <StackPanel>
-                                    <Button
-                                        Click="InEvent"
-                                        CommandParameter="{Binding .}"
-                                        Content="开始"
-                                        Style="{DynamicResource Btn}"
-                                        Tag="1" />
-                                    <Button
-                                        Click="InEvent"
-                                        CommandParameter="{Binding .}"
-                                        Content="结束"
-                                        Style="{DynamicResource Btn}"
-                                        Tag="2" />
+                                    <StackPanel>
+                                        <Button
+                                            Click="InEvent"
+                                            CommandParameter="{Binding .}"
+                                            Content="删除"
+                                            Style="{DynamicResource Btn}"
+                                            Tag="3" />
+                                        <Button
+                                            Click="InEvent"
+                                            CommandParameter="{Binding .}"
+                                            Content="{Binding IsAuto, Converter={StaticResource lsc}}"
+                                            Style="{DynamicResource Btn}"
+                                            Tag="4"
+                                            Visibility="{Binding No, Converter={StaticResource vc}}" />
+                                    </StackPanel>
                                 </StackPanel>
-                                <StackPanel>
-                                    <Button
-                                        Click="InEvent"
-                                        CommandParameter="{Binding .}"
-                                        Content="删除"
-                                        Style="{DynamicResource Btn}"
-                                        Tag="3" />
-                                    <Button
-                                        Click="InEvent"
-                                        CommandParameter="{Binding .}"
-                                        Content="{Binding IsAuto, Converter={StaticResource lsc}}"
-                                        Style="{DynamicResource Btn}"
-                                        Tag="4"
-                                        Visibility="{Binding No, Converter={StaticResource vc}}" />
-                                </StackPanel>
-                            </StackPanel>
-                        </Grid>
-                        <Border
-                            Width="{Binding Width}"
-                            Height="30"
-                            HorizontalAlignment="Left"
-                            Background="{Binding Color}" />
-                    </StackPanel>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+                            </Grid>
+                            <Border
+                                Width="{Binding Width}"
+                                Height="30"
+                                HorizontalAlignment="Left"
+                                Background="{Binding Color}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
         <StackPanel
             Grid.Row="2"
             Margin="0,0,20,0"

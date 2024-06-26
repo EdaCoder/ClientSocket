@@ -62,6 +62,7 @@ namespace ClientSocket
                     {
                         var Ck = bool.Parse((win.AutoDevice.SelectedItem as ComboBoxItem).Content.ToString());
                         var No = VM.Device.Count == 0 ? 0 : (VM.Device.FirstOrDefault(t => t.No != -1)==null?0: VM.Device.Where(t => t.No != -1).Max(t => t.No));
+                        int.TryParse(win.Invet.Text, out int param);
                         var Model = new DeviceModel
                         {
                             IsBegin = false,
@@ -74,7 +75,7 @@ namespace ClientSocket
                             IsAuto = false,
                             No = Ck ? No + 1 : -1,
                             IsSame = false,
-                            Invet= int.Parse(win.Invet.Text)
+                            Invet= param
                         };
                         Model.Color = Model.No <= 0 ? Brushes.White : (Model.No % 2 == 0 ? Brushes.LightBlue : Brushes.OrangeRed);
                         VM.Device.Add(Model);
