@@ -185,7 +185,8 @@ namespace ClientSocket
                                 device.TodayCount++;
                                 if(device.TodayCount>= device.TodayCountLimit&& device.TodayCountLimit>0)
                                     ThreadFactory.Instance.StopTask(device.Id.ToString());
-                                Thread.Sleep((device.Invet<3? Invet: device.Invet )* (device.No/10+device.No));
+                                var Time = (int)((device.Invet < 3 ? Invet : (device.Invet*1000)) * (device.No / 20d + 1));
+                                Thread.Sleep(Time);
                             }
                         }
                     }, device.Id.ToString(),null,false);
@@ -218,7 +219,8 @@ namespace ClientSocket
                             Seed = GetSeed(SameDevice.Count);
                             if (SameDevice.Sum(t => t.TodayCount) >= device.TodayCountLimit && device.TodayCountLimit > 0) 
                                 ThreadFactory.Instance.StopTask("Same");
-                            Thread.Sleep((device.Invet < 3 ? Invet : device.Invet) * (device.No / 10 + device.No));
+                            var Time = (int)((device.Invet < 3 ? Invet : (device.Invet * 1000)) * (device.No / 20d + 1));
+                            Thread.Sleep(Time);
                         }
                     }
                 }, "Same", null, false);
